@@ -8,11 +8,10 @@
   <link rel="stylesheet" type="text/css" href="css/share.css">
 </head>
 <body>
-  <div id="share">
-    
+  <div class="share">
   </div>
-  <script type="text/javascript" src="js/template.js"></script>
-  <script type="text/html" id="tplVideo">
+  <img src="images/loading.gif" class="share-loading">
+  <script type="text/html" id="tplInfo">
     <div class="share-bg" id="bg">
       <ul id="img" class="img">
         {{each bg value i}}
@@ -30,11 +29,140 @@
       </dl>
       <a class="share-link g-fr g-tac" href="javascript:;">Say Hi</a>
     </div> 
-    <video class="share-video" src="http://www.w3school.com.cn/i/movie.ogg" id="videos"></video>
-    <img class="video-play" src="images/playvideo.gif" id="makeplay">
   </script>
+
+  <script type="text/html" id="wxAudio">
+    <audio id="audio" loop autoplay="autoPlay">
+      <source src="{{url}}" type="audio/mpeg">
+      您的浏览器不支持 audio 元素。
+    </audio>
+    <div class="click-play">
+      <img class="video-play" src="images/playaudio.gif" id="makeplay">
+    </div>
+  </script>
+
+  <script type="text/html" id="tplAudio">
+    <audio id="audio" loop>
+      <source src="{{url}}" type="audio/mpeg">
+      您的浏览器不支持 audio 元素。
+    </audio>
+    <div class="click-play">
+      <img class="video-play" src="images/pauseaudio.png" id="makeplay">
+      <img class="video-play wx-video-play" src="images/playaudio.gif">
+    </div>
+  </script>
+
+  <script type="text/html" id="tplVideo">
+    <video id="videos" class="share-video"  width="100%" height="100%"  loop>
+        <source src="{{url}}" type="video/mp4">
+        您的浏览器不支持 video 标签。
+    </video>
+    <img class="video-play" src="images/play.png" id="makeplay">
+  </script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/template.js"></script>
   <script type="text/javascript">
     adapt();
+    
+    var list = {
+      bg: ['./images/2.png','./images/2.png'],
+      name: 'Amy Ward',
+      age: 23,
+      address: 'Beijing City',
+      headurl: './images/logo_640.png',
+      url: 'http://www.runoob.com/try/demo_source/movie.mp4',
+      //url: 'http://www.runoob.com/try/demo_source/horse.mp3'
+    }
+    var type = query().type || '';
+    $('.share').append(template('tplInfo', list));
+    $('.share-loading').css('display','none');
+    switch (type) {
+      case 'video': 
+        $('.share').append(template('tplVideo', list));
+        document.getElementById('makeplay').onclick = playVio;
+        break;
+      case 'audio' :
+        if (isWeiXin()) {
+          console.log(1);
+          $('.share').append(template('wxAudio', list));
+        } else {
+          $('.share').append(template('tplAudio', list));
+          document.getElementById('makeplay').onclick = playAud;
+        }
+        break;
+    }
+
+
+    var bg = document.getElementById('bg');
+    var img = document.getElementById('img');
+    var lis = img.getElementsByTagName('li');
+    var order = document.getElementById('order');
+
+    var num = 0; 
+    var xh = null;
+    if (list.bg.length > 1) {
+      lis[0].className="on";
+      autoPlay();
+    }
+    function play(num){
+        for(i=0;i<lis.length;i++){
+            lis[i].className = '';
+        }
+        lis[num].className = 'on';
+    }
+    //自动播放
+    function autoPlay(){
+        xh = setInterval(function(){
+            num++;
+            if(num >= lis.length){
+                num = 0;
+            }
+            play(num);
+        },3000);
+    }
+    //autoPlay();
+    
+    function playVio() {
+      $('#makeplay').css('display','none');
+      $('#bg').css('display','none');
+      $('#videos').css('display','block');
+      document.getElementById('videos').play();
+    }
+
+    function playAud() {
+      $('.video-play').css('display','none');
+      $('.wx-video-play').css('display','block');
+      document.getElementById('audio').play();
+    }
+
+    function isWeiXin(){
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function query() {
+      //var url = window.document.location.search.toString().substr(1);
+      var url = window.document.location.href.toString();
+      url = url.substr(url.indexOf('?') + 1);
+      if (typeof(url) === 'string') {
+        var u = url.split('&');
+        var get = {};
+        for (var i in u) {
+          if (typeof(u[i]) === 'string') {
+            var j = u[i].split('=');
+            get[j[0]] = j[1];
+          }
+        }
+        return get;
+      } else {
+        return {};
+      }
+    }
+
     function adapt() {
         if (document && window) {
             // init font
@@ -61,48 +189,6 @@
             if (!document.addEventListener) return;
             window.addEventListener(resizeEvt, recalc, false);
         }
-    }
-    var list = {
-      bg: ['./images/1.png','./images/2.png'],
-      name: 'Amy Ward',
-      age: 23,
-      address: 'Beijing City',
-      headurl: './images/logo_640.png'
-    }
-    var share = document.getElementById('share');
-    var html = template('tplVideo', list);
-    share.innerHTML = html;
-    var bg = document.getElementById('bg');
-    var img = document.getElementById('img');
-    var lis = img.getElementsByTagName('li');
-    var order = document.getElementById('order');
-
-    var num = 0; 
-    var xh = null;
-    lis[0].className="on";
-    function play(num){
-        for(i=0;i<lis.length;i++){
-            lis[i].className = '';
-        }
-        lis[num].className = 'on';
-    }
-    //自动播放
-    function autoPlay(){
-        xh = setInterval(function(){
-            num++;
-            if(num >= lis.length){
-                num = 0;
-            }
-            play(num);
-        },3000);
-    }
-    //autoPlay();
-    document.getElementById('makeplay').onclick = playVio;
-    function playVio() {
-      document.getElementById('makeplay').style.display = 'none';
-      document.getElementById('bg').style.display = 'none';
-      document.getElementById('videos').style.display = 'block';
-      document.getElementById('videos').play();
     }
 </script>
 </body>

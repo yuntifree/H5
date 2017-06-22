@@ -63,10 +63,10 @@
     <script type="text/javascript" src="js/template.js"></script>
   <script type="text/javascript">
     adapt();
-    
+
     //页面数据
     var list = {
-      bg: ['./images/2.png','./images/2.png'],
+      bg: ['./images/1.png','./images/2.png'],
       name: 'Amy Ward',
       age: 23,
       address: 'Beijing City',
@@ -79,6 +79,13 @@
     var type = query().type || '';
     $('.share').append(template('tplInfo', list));
     $('.share-loading').css('display','none');
+    $('.share-link').click(function() {
+      $(this).css('backgroundColor','#cd174f');
+      location.href = 'http://meecha.me/down.html'
+    })
+    setTimeout(function() {
+      $('.share-link').css('backgroundColor','#ff2c6a');
+    },300)
     //区分video audio
     switch (type) {
       case 'video': 
@@ -87,7 +94,6 @@
         break;
       case 'audio' :
         if (isWeiXin()) {
-          console.log(1);
           $('.share').append(template('wxAudio', list));
         } else {
           $('.share').append(template('tplAudio', list));
@@ -106,20 +112,20 @@
       autoPlay();
     }
     function play(num){
-        for(i=0;i<lis.length;i++){
-            lis[i].className = '';
-        }
-        lis[num].className = 'on';
+      for(i=0;i<lis.length;i++){
+        lis[i].className = '';
+      }
+      lis[num].className = 'on';
     }
     //自动播放
     function autoPlay(){
-        xh = setInterval(function(){
-            num++;
-            if(num >= lis.length){
-                num = 0;
-            }
-            play(num);
-        },3000);
+      xh = setInterval(function(){
+        num++;
+        if(num >= lis.length){
+            num = 0;
+        }
+        play(num);
+      },3000);
     }
     
     //点击视频播放

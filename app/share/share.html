@@ -117,6 +117,7 @@
       for(i=0;i<lis.length;i++){
         lis[i].className = '';
       }
+        //lis[num].className = 'out'; 
       lis[num].className = 'on';
     }
     //自动播放
@@ -134,7 +135,7 @@
     function playVio() {
       $('#makeplay').css('display','none');
       $('#bg').css('display','none');
-      $('.vio-box').addClass('play');
+      $('#vio-box').addclass('play');
       document.getElementById('videos').play();
     }
     //点击音频播放

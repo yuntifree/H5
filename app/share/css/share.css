@@ -33,10 +33,19 @@
  }
   
  .bg-img{
-   width: 100%;
-   height: auto;
+  width: auto;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
  }
- 
+.img-width {
+  width: auto;
+  height: 100%;
+}
+.img-height {
+  width: 100%;
+  height: auto;
+}
  #img .on {
   display: block;
   transform: scale(1);
@@ -46,11 +55,11 @@
   -o-transform: scale(1);
   opacity: 1;
   filter: alpha(opacity:100);
-  animation:animations 3s linear;
-  -webkit-animation:animations 3s linear;
-  -moz-animation:animations 3s linear;
-  -ms-animation:animations 3s linear;
-  -o-animation:animations 3s linear;
+  animation:animations 3s ease-in;
+  -webkit-animation:animations 3s ease-in;
+  -moz-animation:animations 3s ease-in;
+  -ms-animation:animations 3s ease-in;
+  -o-animation:animations 3s ease-in;
   z-index: 10;
  }
 
@@ -59,7 +68,7 @@
      -webkit-transform: scale(1);
      opacity: 1
    }
-   50% {
+   66% {
      -webkit-transform: scale(1.1);
      opacity: 1
    }
@@ -73,7 +82,7 @@
     -webkit-transform: scale(1);
     opacity: 1
   }
-  50% {
+  66% {
     -webkit-transform: scale(1.1);
     opacity: 1
   }
@@ -88,7 +97,7 @@
      -webkit-transform: scale(1);
      opacity: 1
    }
-   50% {
+   66% {
      -webkit-transform: scale(1.1);
      opacity: 1
    }
@@ -103,7 +112,7 @@
      -webkit-transform: scale(1);
      opacity: 1
    }
-   50% {
+   66% {
      -webkit-transform: scale(1.1);
      opacity: 1
    }

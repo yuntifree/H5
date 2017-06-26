@@ -68,7 +68,7 @@
 
     //页面数据
     var list = {
-      bg: ['./images/1.png','./images/2.png'],
+      bg: ['./images/1.png','https://imgsa.baidu.com/news/q%3D100/sign=ebc0a89b43540923ac69677ea259d1dc/8694a4c27d1ed21b6885785da76eddc451da3f3d.jpg'],
       name: 'Amy Ward',
       age: 23,
       address: 'Beijing City',
@@ -80,6 +80,18 @@
     //填充页面
     var type = query().type || '';
     $('.share').append(template('tplInfo', list));
+
+    var imgs = $('.bg-img');
+    for (var i=0; i<imgs.length; i++) {
+      $('.bg-img').eq(i).load(function(){
+        if(this.naturalWidth > this.naturalHeight) {
+          $(this).addClass('img-width')
+        } else {
+          $(this).addClass('img-height')
+        }
+      })
+    }
+
     $('.share-loading').css('display','none');
     $('.share-link').click(function() {
       $(this).css('backgroundColor','#cd174f');
@@ -107,35 +119,51 @@
     //多张图片放大动画
     var img = document.getElementById('img');
     var lis = img.getElementsByTagName('li');
-    var num = 0; 
+    
+
+    var t = 1; 
+    var playIdx = 0, stopIdx = 0
     var xh = null;
     if (list.bg.length > 1) {
-      lis[0].className="on";
+      play(0)
       autoPlay();
     }
-    function play(num){
-      for(i=0;i<lis.length;i++){
-        lis[i].className = '';
-      }
-        //lis[num].className = 'out'; 
-      lis[num].className = 'on';
+
+    function play(n){
+      lis[n].className = 'on';
+    }
+
+    function stop(n) {
+      lis[n].className = '';
     }
     //自动播放
     function autoPlay(){
-      xh = setInterval(function(){
-        num++;
-        if(num >= lis.length){
-            num = 0;
+      xh = setInterval(function(){    
+        if (t%2 == 0) {
+          playIdx++;
+          if (playIdx >= lis.length) {
+            playIdx = 0
+          }
+          play(playIdx)
         }
-        play(num);
-      },3000);
+        if (t%3 == 0) {
+          stop(stopIdx++)
+          if (stopIdx >= lis.length) {
+            stopIdx = 0
+          }
+        }
+        t++;
+        if (t > 6) {
+          t = t % 6
+        }
+      },1000);
     }
     
     //点击视频播放
     function playVio() {
       $('#makeplay').css('display','none');
       $('#bg').css('display','none');
-      $('#vio-box').addclass('play');
+      $('.vio-box').addClass('play');
       document.getElementById('videos').play();
     }
     //点击音频播放
